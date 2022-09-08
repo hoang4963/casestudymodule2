@@ -5,10 +5,15 @@ import controller.RoomManager;
 import controller.ServiceManager;
 import model.customer.Customer;
 import model.room.GrandRoom;
+import model.room.Room;
 import model.room.StandardRoom;
 import model.room.SuiteRoom;
 import model.service.Service;
 import model.user.User;
+import storage.customermanager.RNWCustomerManager;
+import storage.roommanager.RNWRoomManager;
+import storage.servicemanager.RNWServiceManager;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
@@ -87,7 +92,7 @@ public class Client {
             }
         }
         CustomerManager.getCustomerList().get(index).getRoom().orderService(ServiceManager.getServiceList().get(chose));
-
+        RNWCustomerManager.writeData(CustomerManager.getCustomerList());
     }
 
     private static boolean checkCustomerLogin(long cmnd, List<Customer> customerList) {
@@ -164,6 +169,7 @@ public class Client {
             System.out.println("nhap sai");
             deleteService();
         }
+        RNWServiceManager.writeData(ServiceManager.getServiceList());
     }
 
     private static void createSevice() {
@@ -174,6 +180,7 @@ public class Client {
         Scanner scanner1 = new Scanner(System.in);
         double cost = scanner1.nextDouble();
         ServiceManager.addService(new Service(name,cost));
+        RNWServiceManager.writeData(ServiceManager.getServiceList());
     }
 
     private static void methodCustomerManager() {
@@ -197,6 +204,22 @@ public class Client {
     }
 
     private static void customerCheckOut() {
+        int chose;
+        do {
+            System.out.println("1. Check Out");
+            System.out.println("2. Done");
+            Scanner scanner = new Scanner(System.in);
+            chose = scanner.nextInt();
+            switch (chose){
+                case 1 -> checkOutOneGuy();
+                case 2 -> System.out.println("Da thoat");
+                default -> System.out.println("nhap 1 hoac 2");
+            }
+        }while (chose !=2);
+
+    }
+
+    private static void checkOutOneGuy() {
         boolean check = false;
         int index = QUIT;
         System.out.println("Nhap cmnd");
@@ -205,18 +228,23 @@ public class Client {
         for (int i = 0; i < CustomerManager.getCustomerList().size(); i++) {
             if (CustomerManager.getCustomerList().get(i).getIdentityCard() == cmnd)
             {index = i;
-            check = true;
-            break;}
+                check = true;
+                break;}
         }
         if (check)
         {
-            CustomerManager.getCustomerList().get(index).getRoom().setEmpty(true);
-            System.out.println("Bill la: " + CustomerManager.getCustomerList().get(index).getRoom().calculateBill());
-            CustomerManager.getCustomerList().get(index).getRoom().getServiceList().clear();
+            Customer tempCustomer = CustomerManager.getCustomerList().get(index);
+            Room tempRoom = CustomerManager.getCustomerList().get(index).getRoom();
+            System.out.println("Bill la: " + tempRoom.calculateBill());
+            tempRoom.getServiceList().clear();
+            tempRoom.getCustomerList().remove(tempCustomer);
             CustomerManager.getCustomerList().remove(index);
+            if (tempRoom.getCustomerList().size() == 0) tempRoom.setEmpty(true);
             System.out.println("Check out done");
         }
         else System.out.println("khong check out duoc");
+        RNWCustomerManager.writeData(CustomerManager.getCustomerList());
+        RNWRoomManager.writeData(RoomManager.getListRoom());
     }
 
     private static void creatCumtomerCheckIn() {
@@ -264,6 +292,8 @@ public class Client {
 
         }
         System.out.println("Check in done");
+        RNWRoomManager.writeData(RoomManager.getListRoom());
+        RNWCustomerManager.writeData(CustomerManager.getCustomerList());
     }
 
     private static void createOneCustomer(int index, int i) {
@@ -368,6 +398,8 @@ public class Client {
                 addRoom();
             }
         }
+        RNWRoomManager.writeData(RoomManager.getListRoom());
+        RNWCustomerManager.writeData(CustomerManager.getCustomerList());
     }
 
     private static void editRoom() {
@@ -387,6 +419,8 @@ public class Client {
         }
         if (checkNameRoom) whatEdit(index);
         else System.out.println("khong co phong nay");
+        RNWRoomManager.writeData(RoomManager.getListRoom());
+        RNWCustomerManager.writeData(CustomerManager.getCustomerList());
     }
 
     private static void whatEdit(int index) {
@@ -413,6 +447,8 @@ public class Client {
             default -> {System.out.println("Chon 1 hoac 2");
             chosenEditRoom(chose, index);}
         }
+        RNWRoomManager.writeData(RoomManager.getListRoom());
+        RNWCustomerManager.writeData(CustomerManager.getCustomerList());
     }
 
     private static void showRoom() {
