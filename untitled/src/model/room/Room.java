@@ -21,11 +21,17 @@ public abstract class Room implements Bill {
         this.name = name;
         this.dayCheckIn = null;
         this.isEmpty = true;
+        serviceList = null;
     }
 
     public String getName() {
         return name;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public LocalDate getDayCheckIn() {
         return dayCheckIn;
     }
@@ -61,5 +67,9 @@ public abstract class Room implements Bill {
     }
     public void orderService(Service service){
         serviceList.add(service);
+    }
+
+    public List<Service> getServiceList() {
+        return serviceList;
     }
 }

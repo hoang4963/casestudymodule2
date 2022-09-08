@@ -1,5 +1,6 @@
 package model.room;
 
+import controller.CalculateDate;
 import model.customer.Customer;
 
 import java.util.ArrayList;
@@ -14,5 +15,14 @@ public class StandardRoom extends Room {
 
     public ArrayList<Customer> getCustomerList() {
         return customerList;
+    }
+
+    @Override
+    public double calculateBill() {
+        double sum = 0;
+        for (int i = 0; i < serviceList.size(); i++) {
+            sum += serviceList.get(i).getCost();
+        }
+        return this.cost* CalculateDate.countDays(dayCheckIn.getDayOfMonth(),dayCheckIn.getMonthValue(),dayCheckIn.getYear()) + sum;
     }
 }

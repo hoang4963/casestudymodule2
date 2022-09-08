@@ -36,4 +36,10 @@ public class Customer {
     public void setRoom(Room room) {
         this.room = room;
     }
+
+    public Customer(String name, long identityCard, Room room) {
+        this.name = name;
+        this.identityCard = identityCard;
+        this.room = room;
+    }
 }

@@ -1,17 +1,19 @@
 package controller;
 
 import model.customer.Customer;
+import storage.customermanager.RNWCustomerManager;
 
 import java.util.List;
 
 public class CustomerManager {
-    List<Customer> customerList;
-    private static CustomerManager instance;
-    CustomerManager(){}
-    public CustomerManager getInstance(){
-        if (instance == null){
-            instance = new CustomerManager();
-        }
-        return instance;
+    static List<Customer> customerList;
+
+    public static void addCumtomer(Customer customer){
+        customerList.add(customer);
+    }
+
+    public static List<Customer> getCustomerList() {
+        return customerList;
     }
 }
+
