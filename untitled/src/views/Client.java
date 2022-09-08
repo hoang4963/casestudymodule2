@@ -4,6 +4,9 @@ import controller.CustomerManager;
 import controller.RoomManager;
 import controller.ServiceManager;
 import model.customer.Customer;
+import model.room.GrandRoom;
+import model.room.StandardRoom;
+import model.room.SuiteRoom;
 import model.service.Service;
 import model.user.User;
 import java.util.List;
@@ -15,18 +18,17 @@ public class Client {
     public static final int FIRSTCHOSEN = 1;
     public static final int SECONDCHOSEN = 2;
     public static final int THIRDCHOSEN = 3;
+    public static final int QUIT = -1;
 
     public static void main(String[] args) {
         int chose;
-        do {
             chose = getChoseBegin();
             whoAreYou(chose);
-        } while (chose != -1);
     }
 
     private static int getChoseBegin() {
         int chose;
-        System.out.println("Ban la ai?( nhap 1, 2 hoac -1");
+        System.out.println("Ban la ai?(nhap 1, 2 hoac -1)");
         System.out.println("1. Quan ly");
         System.out.println("2. Khach hang");
         System.out.println("Nhap -1 de thoat");
@@ -39,7 +41,11 @@ public class Client {
         switch (chose){
             case FIRSTCHOSEN -> logInAdmin();
             case SECONDCHOSEN -> logInCumtomer();
-            default -> System.out.println("Nhap 1,2 hoac -1");
+            case QUIT -> System.out.println("Out");
+            default -> {
+                System.out.println("Nhap 1,2 hoac -1");
+                whoAreYou(getChoseBegin());
+            }
         }
     }
 
@@ -73,11 +79,12 @@ public class Client {
     }
 
     private static void addBill(int chose, long cmnd) {
-        int index = -1;
+        int index = QUIT;
         for (int i = 0; i < CustomerManager.getCustomerList().size(); i++) {
-            if (cmnd == CustomerManager.getCustomerList().get(i).getIdentityCard())
+            if (cmnd == CustomerManager.getCustomerList().get(i).getIdentityCard()){
                 index = i;
-            break;
+                break;
+            }
         }
         CustomerManager.getCustomerList().get(index).getRoom().orderService(ServiceManager.getServiceList().get(chose));
 
@@ -95,7 +102,7 @@ public class Client {
         System.out.println("nhap ten dang nhap");
         Scanner scanner1 = new Scanner(System.in);
         String account = scanner1.nextLine();
-        System.out.println("nhap mat khau ( dang so )");
+        System.out.println("nhap mat khau (dang so)");
         Scanner scanner2 = new Scanner(System.in);
         int password = scanner2.nextInt();
         if (checkAccountAdmin(account,password))
@@ -191,7 +198,7 @@ public class Client {
 
     private static void customerCheckOut() {
         boolean check = false;
-        int index = -1;
+        int index = QUIT;
         System.out.println("Nhap cmnd");
         Scanner scanner = new Scanner(System.in);
         long cmnd = scanner.nextLong();
@@ -213,18 +220,27 @@ public class Client {
     }
 
     private static void creatCumtomerCheckIn() {
+        System.out.println("Chon loai phong");
+        System.out.println("1.Grand");
+        System.out.println("2.Standard");
+        System.out.println("3.Suite");
+        Scanner scanner4 = new Scanner(System.in);
+        int chose = scanner4.nextInt();
+        switch (chose){
+            case 1 -> showGrandRoomNull();
+            case 2-> showStandardRoomNull();
+            case 3 -> showSuiteRoomNull();
+        }
+        Scanner scanner2 = new Scanner(System.in);
+        String nameRoom = scanner2.nextLine();
         boolean check = false;
-        int index = -1;
+        int index = QUIT;
         System.out.println("Nhap ten");
         Scanner scanner = new Scanner(System.in);
         String name = scanner.nextLine();
         System.out.println("nhap cmnd");
         Scanner scanner1 = new Scanner(System.in);
         long cmnd = scanner1.nextLong();
-        System.out.println("Chon phong theo ten");
-        showRoom();
-        Scanner scanner2 = new Scanner(System.in);
-        String nameRoom = scanner2.nextLine();
         for (int i = 0; i < RoomManager.getSize(); i++) {
             if (Objects.equals(nameRoom, RoomManager.getListRoom().get(i).getName())){
                 check = true;
@@ -242,9 +258,49 @@ public class Client {
         }
     }
 
+    private static void showSuiteRoomNull() {
+        boolean check = true;
+        for (int i = 0; i < RoomManager.getSize(); i++) {
+            if (RoomManager.getListRoom().get(i).isEmpty() && RoomManager.getListRoom().get(i) instanceof SuiteRoom){
+                System.out.println(RoomManager.getListRoom().get(i));
+                check = false;
+            }
+        }
+        if (check){
+            System.out.println("het phong");
+        }
+    }
+
+    private static void showStandardRoomNull() {
+        boolean check = true;
+        for (int i = 0; i < RoomManager.getSize(); i++) {
+            if (RoomManager.getListRoom().get(i).isEmpty() && RoomManager.getListRoom().get(i) instanceof StandardRoom){
+                System.out.println(RoomManager.getListRoom().get(i));
+                check = false;
+            }
+        }
+        if (check){
+            System.out.println("het phong");
+        }
+    }
+
+    private static void showGrandRoomNull() {
+        boolean check = true;
+        for (int i = 0; i < RoomManager.getSize(); i++) {
+            if (RoomManager.getListRoom().get(i).isEmpty() && RoomManager.getListRoom().get(i) instanceof GrandRoom){
+                System.out.println(RoomManager.getListRoom().get(i));
+                check = false;
+            }
+        }
+        if (check){
+            System.out.println("het phong");
+        }
+    }
+
     private static void methodRoomManager() {
         System.out.println("1. Show phong");
         System.out.println("2. Chinh sua phong");
+        System.out.println("3. Them phong");
         Scanner scanner = new Scanner(System.in);
         int chose = scanner.nextInt();
         choseMethodRoomManager(chose);
@@ -254,22 +310,51 @@ public class Client {
         switch (chose){
             case FIRSTCHOSEN -> showRoom();
             case SECONDCHOSEN -> editRoom();
-            default -> System.out.println("nhap 1 hoac 2");
+            case THIRDCHOSEN -> addRoom();
+            default -> { System.out.println("nhap 1 hoac 2 hoac 3");
+                methodRoomManager();
+            }
+        }
+    }
+
+    private static void addRoom() {
+        System.out.println("chon loai phong");
+        System.out.println("1.Grand");
+        System.out.println("2.Standard");
+        System.out.println("3.Suite");
+        Scanner scanner2 = new Scanner(System.in);
+        int chose = scanner2.nextInt();
+        System.out.println("nhap ten phong");
+        Scanner scanner = new Scanner(System.in);
+        String name = scanner.nextLine();
+        System.out.println("Nhap gia phong");
+        Scanner scanner1 = new Scanner(System.in);
+        double cost = scanner1.nextDouble();
+        switch (chose){
+            case FIRSTCHOSEN -> RoomManager.addRoom(new GrandRoom(name, cost));
+            case SECONDCHOSEN -> RoomManager.addRoom(new StandardRoom(name, cost));
+            case THIRDCHOSEN -> RoomManager.addRoom(new SuiteRoom(name, cost));
+            default -> {
+                System.out.println("nhap sai");
+                addRoom();
+            }
         }
     }
 
     private static void editRoom() {
         showRoom();
-        int index = -1;
+        int index = QUIT;
         boolean checkNameRoom = false;
         System.out.println("Nhap ten phong muon sua");
         Scanner scanner = new Scanner(System.in);
         String name = scanner.nextLine();
         for (int i = 0; i < RoomManager.getListRoom().size(); i++) {
-            if (Objects.equals(name, RoomManager.getListRoom().get(i).getName()))
+            if (Objects.equals(name, RoomManager.getListRoom().get(i).getName())){
                 checkNameRoom = true;
                 index = i;
-            break;
+                break;
+            }
+
         }
         if (checkNameRoom) whatEdit(index);
         else System.out.println("khong co phong nay");

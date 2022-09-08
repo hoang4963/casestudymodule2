@@ -6,7 +6,7 @@ import storage.customermanager.RNWCustomerManager;
 import java.util.List;
 
 public class CustomerManager {
-    static List<Customer> customerList;
+    static List<Customer> customerList = RNWCustomerManager.readData();
 
     public static void addCumtomer(Customer customer){
         customerList.add(customer);

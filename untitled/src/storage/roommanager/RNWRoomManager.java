@@ -1,13 +1,15 @@
 package storage.roommanager;
 
 import controller.RoomManager;
+import model.customer.Customer;
 import model.room.Room;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RNWRoomManager {
-    private final String LINK_ROOMMAMAGER = "C:\\Users\\Acer\\Desktop\\codegym\\Module2APJ\\casestudy\\untitled\\src\\storage\\roommanager\\roommanager.txt";
+    private static final String LINK_ROOMMAMAGER = "C:\\Users\\Acer\\Desktop\\codegym\\Module2APJ\\casestudy\\untitled\\src\\storage\\roommanager\\roommanager.txt";
     private RNWRoomManager(){}
 
     private static RNWRoomManager instance;
@@ -17,11 +19,15 @@ public class RNWRoomManager {
             instance = new RNWRoomManager();
         return instance;
     }
-    public List<Room> readData() {
+    public static List<Room> readData() {
         RoomManager roomManager = null;
         try {
             FileInputStream fis = new FileInputStream(LINK_ROOMMAMAGER);
             ObjectInputStream ois = new ObjectInputStream(fis);
+            if (ois.readObject() == null){
+                writeData(new ArrayList<Room>());
+                readData();
+            }
             roomManager = (RoomManager) ois.readObject();
             ois.close();
             fis.close();
@@ -33,7 +39,7 @@ public class RNWRoomManager {
         return (List<Room>) roomManager;
     }
 
-    public void writeData(List<Room> list) {
+    public static void writeData(List<Room> list) {
         try {
             FileOutputStream fis = new FileOutputStream(LINK_ROOMMAMAGER);
             ObjectOutputStream oos = new ObjectOutputStream(fis);

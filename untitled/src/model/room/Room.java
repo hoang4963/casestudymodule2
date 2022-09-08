@@ -24,6 +24,14 @@ public abstract class Room implements Bill {
         serviceList = null;
     }
 
+    public Room(String name, LocalDate dayCheckIn, double cost) {
+        this.name = name;
+        this.dayCheckIn = dayCheckIn;
+        this.cost = cost;
+        this.isEmpty = true;
+        serviceList = null;
+    }
+
     public String getName() {
         return name;
     }

@@ -3,6 +3,7 @@ package storage.customermanager;
 import model.customer.Customer;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RNWCustomerManager {
@@ -18,11 +19,15 @@ public class RNWCustomerManager {
         super();
     }
 
-    public List<Customer> readData() {
+    public static List<Customer> readData() {
         List<Customer> customerList = null;
         try {
             FileInputStream fis = new FileInputStream(LINK_CUSTOMERMANAGER);
             ObjectInputStream ois = new ObjectInputStream(fis);
+            if (ois.readObject() == null){
+                writeData(new ArrayList<Customer>());
+                readData();
+            }
             customerList = (List<Customer>) ois.readObject();
             ois.close();
             fis.close();
@@ -34,7 +39,7 @@ public class RNWCustomerManager {
         return customerList;
     }
 
-    public void writeData(List<Customer> list) {
+    public static void writeData(List<Customer> list) {
         try {
             FileOutputStream fis = new FileOutputStream(LINK_CUSTOMERMANAGER);
             ObjectOutputStream oos = new ObjectOutputStream(fis);
