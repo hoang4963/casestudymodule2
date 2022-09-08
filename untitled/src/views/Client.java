@@ -226,21 +226,16 @@ public class Client {
         System.out.println("3.Suite");
         Scanner scanner4 = new Scanner(System.in);
         int chose = scanner4.nextInt();
-        switch (chose){
-            case 1 -> showGrandRoomNull();
-            case 2-> showStandardRoomNull();
-            case 3 -> showSuiteRoomNull();
+        if (chose >0 && chose <4)
+        choseTypeRoom(chose);
+        else {System.out.println("nhap lai");
+                creatCumtomerCheckIn();
         }
         Scanner scanner2 = new Scanner(System.in);
         String nameRoom = scanner2.nextLine();
         boolean check = false;
         int index = QUIT;
-        System.out.println("Nhap ten");
-        Scanner scanner = new Scanner(System.in);
-        String name = scanner.nextLine();
-        System.out.println("nhap cmnd");
-        Scanner scanner1 = new Scanner(System.in);
-        long cmnd = scanner1.nextLong();
+
         for (int i = 0; i < RoomManager.getSize(); i++) {
             if (Objects.equals(nameRoom, RoomManager.getListRoom().get(i).getName())){
                 check = true;
@@ -249,12 +244,46 @@ public class Client {
             }
         }
         if (check) {
-            RoomManager.getListRoom().get(index).setEmpty(false);
-            CustomerManager.addCumtomer(new Customer(name, cmnd, RoomManager.getListRoom().get(index)));
-            System.out.println("Check in done");
+            checkInMoreOne(index, chose);
         }
         else {System.out.println("Nhap sai phong");
         creatCumtomerCheckIn();
+        }
+    }
+
+    private static void checkInMoreOne(int index, int chose) {
+        if (chose == 1){
+            for (int i =0; i<4;i++){
+                createOneCustomer(index, i);
+            }
+        }
+        else if (chose == 2 || chose == 3){
+            for (int i=0; i < 2; i++){
+                createOneCustomer(index, i);
+            }
+
+        }
+        System.out.println("Check in done");
+    }
+
+    private static void createOneCustomer(int index, int i) {
+        System.out.println("Nhap ten nguoi thu " + (i +1) + " (neu khong co nhap 0)");
+        Scanner scanner = new Scanner(System.in);
+        String name = scanner.nextLine();
+        System.out.println("nhap cmnd nguoi thu " + (i +1) + " (neu khong co nhap 0)");
+        Scanner scanner1 = new Scanner(System.in);
+        long cmnd = scanner1.nextLong();
+        Customer customer1 = new Customer(name, cmnd, RoomManager.getListRoom().get(index));
+        RoomManager.getListRoom().get(index).setEmpty(false);
+        CustomerManager.addCumtomer(customer1);
+        CustomerManager.getCustomerList().get(index).getRoom().getCustomerList().add(customer1);
+    }
+
+    private static void choseTypeRoom(int chose) {
+        switch (chose){
+            case 1 -> showGrandRoomNull();
+            case 2-> showStandardRoomNull();
+            case 3 -> showSuiteRoomNull();
         }
     }
 

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class GrandRoom extends Room {
     private final int CAPACITY = 4;
-    ArrayList<Customer> customerList;
+
     public GrandRoom(String name, double cost) {
         super(name, cost);
         customerList = new ArrayList(CAPACITY);

@@ -2,9 +2,11 @@ package model.room;
 
 
 
+import model.customer.Customer;
 import model.service.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -15,6 +17,7 @@ public abstract class Room implements Bill {
     private Room(){}
     protected double cost;
     protected List<Service> serviceList;
+    protected ArrayList<Customer> customerList;
 
     protected Room(String name, double cost) {
         this.cost = cost;
@@ -79,5 +82,9 @@ public abstract class Room implements Bill {
 
     public List<Service> getServiceList() {
         return serviceList;
+    }
+
+    public ArrayList<Customer> getCustomerList() {
+        return customerList;
     }
 }
