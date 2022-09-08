@@ -1,7 +1,5 @@
 package storage.servicemanager;
 
-import controller.ServiceManager;
-import model.customer.Customer;
 import model.service.Service;
 
 import java.io.*;
@@ -21,16 +19,12 @@ public class RNWServiceManager {
         }
         return instance;
     }
-    public static List<Service> readData() {
-        ServiceManager serviceManager = null;
+    public static ArrayList<Service> readData() {
+        ArrayList<Service> arrayList = new ArrayList<>();
         try {
             FileInputStream fis = new FileInputStream(LINK_SERVICEMANAGER);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            serviceManager = (ServiceManager) ois.readObject();
-            if (ois.readObject() == null){
-                writeData(new ArrayList<Service>());
-                readData();
-            }
+            arrayList = (ArrayList<Service>) ois.readObject();
             ois.close();
             fis.close();
         } catch (IOException e) {
@@ -38,7 +32,7 @@ public class RNWServiceManager {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return (List<Service>) serviceManager;
+        return arrayList;
     }
     public static void writeData(List<Service> list) {
         try {

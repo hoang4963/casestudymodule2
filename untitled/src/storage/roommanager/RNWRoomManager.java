@@ -1,7 +1,6 @@
 package storage.roommanager;
 
 import controller.RoomManager;
-import model.customer.Customer;
 import model.room.Room;
 
 import java.io.*;
@@ -19,16 +18,12 @@ public class RNWRoomManager {
             instance = new RNWRoomManager();
         return instance;
     }
-    public static List<Room> readData() {
-        RoomManager roomManager = null;
+    public static ArrayList<Room> readData() {
+        ArrayList<Room> arrayList = new ArrayList<>();
         try {
             FileInputStream fis = new FileInputStream(LINK_ROOMMAMAGER);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            if (ois.readObject() == null){
-                writeData(new ArrayList<Room>());
-                readData();
-            }
-            roomManager = (RoomManager) ois.readObject();
+            arrayList = (ArrayList<Room>) ois.readObject();
             ois.close();
             fis.close();
         }catch (IOException e){
@@ -36,7 +31,7 @@ public class RNWRoomManager {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return (List<Room>) roomManager;
+        return arrayList;
     }
 
     public static void writeData(List<Room> list) {

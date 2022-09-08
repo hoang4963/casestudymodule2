@@ -13,7 +13,6 @@ import model.user.User;
 import storage.customermanager.RNWCustomerManager;
 import storage.roommanager.RNWRoomManager;
 import storage.servicemanager.RNWServiceManager;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
