@@ -2,7 +2,9 @@ package model.customer;
 
 import model.room.Room;
 
-public class Customer {
+import java.io.Serializable;
+
+public class Customer implements Serializable {
     private String name;
     private long identityCard;
     Room room;

@@ -1,8 +1,9 @@
 package controller;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class CalculateDate {
+public class CalculateDate implements Serializable {
     public static boolean checkPrimeYear(int year){
         return year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
     }

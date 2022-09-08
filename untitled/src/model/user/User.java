@@ -1,6 +1,8 @@
 package model.user;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     private static final String ACCOUNT = "admin";
     private static final int PASSWORD = 1703;
 

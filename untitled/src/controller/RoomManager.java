@@ -4,10 +4,11 @@ package controller;
 import model.room.Room;
 import storage.roommanager.RNWRoomManager;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoomManager {
+public class RoomManager implements Serializable {
     private static final int CAPACITY = 5;
      static List<Room> roomList = RNWRoomManager.readData();
     private RoomManager(){}

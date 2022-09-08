@@ -1,5 +1,5 @@
 package model.room;
 
-public interface Bill {
+public interface MakeBill {
     public double calculateBill();
 }

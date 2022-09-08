@@ -5,12 +5,13 @@ package model.room;
 import model.customer.Customer;
 import model.service.Service;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public abstract class Room implements Bill {
+public abstract class Room implements MakeBill, Serializable {
     protected String name;
     protected LocalDate dayCheckIn;
     protected boolean isEmpty;
