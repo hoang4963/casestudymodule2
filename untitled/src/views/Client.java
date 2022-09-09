@@ -13,6 +13,8 @@ import model.user.User;
 import storage.customermanager.RNWCustomerManager;
 import storage.roommanager.RNWRoomManager;
 import storage.servicemanager.RNWServiceManager;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
@@ -277,7 +279,18 @@ public class Client {
         creatCumtomerCheckIn();
         }
     }
-
+    private static LocalDate creatDayCheckIn(){
+        System.out.println("Nhap ngay check in:");
+        Scanner scanner = new Scanner(System.in);
+        int day = scanner.nextInt();
+        System.out.println("Nhap thang check in:");
+        Scanner scanner1 = new Scanner(System.in);
+        int month = scanner1.nextInt();
+        System.out.println("Nhap nam check in");
+        Scanner scanner2 = new Scanner(System.in);
+        int year = scanner2.nextInt();
+        return LocalDate.of(year,month,day);
+    }
     private static void checkInMoreOne(int index, int chose) {
         if (chose == 1){
             for (int i =0; i<4;i++){
@@ -290,6 +303,8 @@ public class Client {
             }
 
         }
+        LocalDate dayCheckIn = creatDayCheckIn();
+        RoomManager.getListRoom().get(index).setDayCheckIn(dayCheckIn);
         System.out.println("Check in done");
         RNWRoomManager.writeData(RoomManager.getListRoom());
         RNWCustomerManager.writeData(CustomerManager.getCustomerList());
