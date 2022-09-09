@@ -9,10 +9,12 @@ import model.room.Room;
 import model.room.StandardRoom;
 import model.room.SuiteRoom;
 import model.service.Service;
-import model.user.User;
 import storage.customermanager.RNWCustomerManager;
 import storage.roommanager.RNWRoomManager;
 import storage.servicemanager.RNWServiceManager;
+import views.menu.LogIn;
+import views.menu.Menu;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
@@ -26,21 +28,9 @@ public class Client {
 
     public static void main(String[] args) {
         int chose;
-            chose = getChoseBegin();
+            chose = Menu.getChoseBegin();
             whoAreYou(chose);
     }
-
-    private static int getChoseBegin() {
-        int chose;
-        System.out.println("Ban la ai?(nhap 1, 2 hoac -1)");
-        System.out.println("1. Quan ly");
-        System.out.println("2. Khach hang");
-        System.out.println("Nhap -1 de thoat");
-        Scanner scanner = new Scanner(System.in);
-        chose = scanner.nextInt();
-        return chose;
-    }
-
     public static void whoAreYou(int chose) {
         switch (chose){
             case FIRSTCHOSEN -> logInAdmin();
@@ -48,7 +38,7 @@ public class Client {
             case QUIT -> System.out.println("Out");
             default -> {
                 System.out.println("Nhap 1,2 hoac -1");
-                whoAreYou(getChoseBegin());
+                whoAreYou(Menu.getChoseBegin());
             }
         }
     }
@@ -60,7 +50,7 @@ public class Client {
         if (checkCustomerLogin(cmnd, CustomerManager.getCustomerList())) methodCustomer(cmnd);
         else {
             System.out.println("sai cmnd");
-            int chose = getChoseBegin();
+            int chose = Menu.getChoseBegin();
             whoAreYou(chose);
         }
     }
@@ -94,25 +84,12 @@ public class Client {
     }
 
     private static void logInAdmin() {
-        System.out.println("nhap ten dang nhap");
-        Scanner scanner1 = new Scanner(System.in);
-        String account = scanner1.nextLine();
-        System.out.println("nhap mat khau (dang so)");
-        Scanner scanner2 = new Scanner(System.in);
-        int password = scanner2.nextInt();
-        if (User.checkAccountAdmin(account,password))
+        if (LogIn.logInAdmin())
             methodAdmin();
-        else {System.out.println("Sai");
-        logInAdmin();
-        }
     }
 
     private static void methodAdmin() {
-        System.out.println("1. Quan ly phong");
-        System.out.println("2. Ve khach hang");
-        System.out.println("3. Them xoa cac dich vu");
-        Scanner scanner = new Scanner(System.in);
-        int chose = scanner.nextInt();
+        int chose = Menu.methodAdmin();
         choseMethodAdmin(chose);
     }
 
@@ -126,10 +103,7 @@ public class Client {
     }
 
     private static void methodServiceManager() {
-        System.out.println("1. Them");
-        System.out.println("2. Xoa");
-        Scanner scanner = new Scanner(System.in);
-        int chose = scanner.nextInt();
+        int chose = Menu.methodServiceManager();
         choseMethodSevice(chose);
     }
 
@@ -172,11 +146,7 @@ public class Client {
     }
 
     private static void methodCustomerManager() {
-        System.out.println("1. Check in");
-        System.out.println("2. Check out");
-        int chose;
-        Scanner scanner = new Scanner(System.in);
-        chose = scanner.nextInt();
+        int chose = Menu.methodCustomerManager();
         choseMethodCustomerManager(chose);
     }
 
@@ -194,10 +164,7 @@ public class Client {
     private static void customerCheckOut() {
         int chose;
         do {
-            System.out.println("1. Check Out");
-            System.out.println("2. Done");
-            Scanner scanner = new Scanner(System.in);
-            chose = scanner.nextInt();
+            chose = Menu.choseCheckOut();
             switch (chose){
                 case 1 -> checkOutOneGuy();
                 case 2 -> System.out.println("Da thoat");
@@ -231,12 +198,7 @@ public class Client {
     }
 
     private static void creatCumtomerCheckIn() {
-        System.out.println("Chon loai phong");
-        System.out.println("1.Grand");
-        System.out.println("2.Standard");
-        System.out.println("3.Suite");
-        Scanner scanner4 = new Scanner(System.in);
-        int chose = scanner4.nextInt();
+        int chose = Menu.choseTypeRoom();
         if (chose >0 && chose <4)
         choseTypeRoom(chose);
         else {System.out.println("nhap lai");
@@ -254,18 +216,6 @@ public class Client {
         creatCumtomerCheckIn();
         }
     }
-    private static LocalDate creatDayCheckIn(){
-        System.out.println("Nhap ngay check in:");
-        Scanner scanner = new Scanner(System.in);
-        int day = scanner.nextInt();
-        System.out.println("Nhap thang check in:");
-        Scanner scanner1 = new Scanner(System.in);
-        int month = scanner1.nextInt();
-        System.out.println("Nhap nam check in");
-        Scanner scanner2 = new Scanner(System.in);
-        int year = scanner2.nextInt();
-        return LocalDate.of(year,month,day);
-    }
     private static void checkInMoreOne(int index, int chose) {
         if (chose == 1){
             for (int i =0; i<4;i++){
@@ -278,7 +228,7 @@ public class Client {
             }
 
         }
-        LocalDate dayCheckIn = creatDayCheckIn();
+        LocalDate dayCheckIn = Menu.creatDayCheckIn();
         RoomManager.getListRoom().get(index).setDayCheckIn(dayCheckIn);
         System.out.println("Check in done");
         RNWRoomManager.writeData(RoomManager.getListRoom());
@@ -286,13 +236,7 @@ public class Client {
     }
 
     private static void createOneCustomer(int index, int i) {
-        System.out.println("Nhap ten nguoi thu " + (i +1) + " (neu khong co nhap 0)");
-        Scanner scanner = new Scanner(System.in);
-        String name = scanner.nextLine();
-        System.out.println("nhap cmnd nguoi thu " + (i +1) + " (neu khong co nhap 0)");
-        Scanner scanner1 = new Scanner(System.in);
-        long cmnd = scanner1.nextLong();
-        Customer customer1 = new Customer(name, cmnd, RoomManager.getListRoom().get(index));
+        Customer customer1 = Menu.createOneCustomer(index,i);
         RoomManager.getListRoom().get(index).setEmpty(false);
         CustomerManager.addCumtomer(customer1);
         CustomerManager.getCustomerList().get(index).getRoom().getCustomerList().add(customer1);
@@ -308,11 +252,7 @@ public class Client {
 
 
     private static void methodRoomManager() {
-        System.out.println("1. Show phong");
-        System.out.println("2. Chinh sua phong");
-        System.out.println("3. Them phong");
-        Scanner scanner = new Scanner(System.in);
-        int chose = scanner.nextInt();
+        int chose = Menu.methodRoomManager();
         choseMethodRoomManager(chose);
     }
 
@@ -328,12 +268,7 @@ public class Client {
     }
 
     private static void addRoom() {
-        System.out.println("chon loai phong");
-        System.out.println("1.Grand");
-        System.out.println("2.Standard");
-        System.out.println("3.Suite");
-        Scanner scanner2 = new Scanner(System.in);
-        int chose = scanner2.nextInt();
+        int chose = Menu.choseTypeRoom();
         System.out.println("nhap ten phong");
         Scanner scanner = new Scanner(System.in);
         String name = scanner.nextLine();
@@ -368,9 +303,8 @@ public class Client {
     }
 
     private static void whatEdit(int index) {
-        int chose = 0;
-        System.out.println("1. Sua gia tien");
-        System.out.println("2. Sua ten");
+        int chose;
+        chose = Menu.whatEditRoom();
         chosenEditRoom(chose, index);
     }
     private static void chosenEditRoom(int chose, int index) {

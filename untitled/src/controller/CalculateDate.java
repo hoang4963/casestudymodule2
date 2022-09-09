@@ -38,8 +38,8 @@ public class CalculateDate implements Serializable {
     }
     public static int calculateDaysOfMonth(int month, int year){
         int daysOfMonth=0;
-        for (int i = 0; i < month ; i++) {
-            daysOfMonth += dayOfMonth(month,year);
+        for (int i = 1; i < month ; i++) {
+            daysOfMonth += dayOfMonth(i,year);
         }
         return daysOfMonth;
     }
@@ -48,8 +48,6 @@ public class CalculateDate implements Serializable {
     }
     public static int countDays(int day, int month, int year){
         LocalDate now = LocalDate.now();
-        if (calculateDays(now.getDayOfMonth(),now.getMonthValue(), now.getYear()) - calculateDays(day,month,year) > 1)
-            return calculateDays(now.getDayOfMonth(),now.getMonthValue(), now.getYear()) - calculateDays(day,month,year);
-        else return 1;
+        return Math.max(calculateDays(now.getDayOfMonth(), now.getMonthValue(), now.getYear()) - calculateDays(day, month, year), 1);
     }
 }
