@@ -13,10 +13,8 @@ import model.user.User;
 import storage.customermanager.RNWCustomerManager;
 import storage.roommanager.RNWRoomManager;
 import storage.servicemanager.RNWServiceManager;
-
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class Client {
@@ -69,9 +67,7 @@ public class Client {
 
     private static void methodCustomer(long cmnd) {
         System.out.println("Order do an");
-        for (int i = 0; i < ServiceManager.getServiceList().size(); i++) {
-            System.out.println((i+1) + ". " + ServiceManager.getServiceList().get(i).getName());
-        }
+        ServiceManager.showService();
         Scanner scanner = new Scanner(System.in);
         int chose = scanner.nextInt();
         callService(chose, cmnd);
@@ -85,14 +81,7 @@ public class Client {
     }
 
     private static void addBill(int chose, long cmnd) {
-        int index = QUIT;
-        for (int i = 0; i < CustomerManager.getCustomerList().size(); i++) {
-            if (cmnd == CustomerManager.getCustomerList().get(i).getIdentityCard()){
-                index = i;
-                break;
-            }
-        }
-        CustomerManager.getCustomerList().get(index).getRoom().orderService(ServiceManager.getServiceList().get(chose));
+        CustomerManager.addBillService(chose,cmnd);
         RNWCustomerManager.writeData(CustomerManager.getCustomerList());
     }
 
@@ -111,7 +100,7 @@ public class Client {
         System.out.println("nhap mat khau (dang so)");
         Scanner scanner2 = new Scanner(System.in);
         int password = scanner2.nextInt();
-        if (checkAccountAdmin(account,password))
+        if (User.checkAccountAdmin(account,password))
             methodAdmin();
         else {System.out.println("Sai");
         logInAdmin();
@@ -157,13 +146,11 @@ public class Client {
 
     private static void deleteService() {
         System.out.println("Chon");
-        for (int i = 0; i < ServiceManager.getServiceList().size(); i++) {
-            System.out.println((i+1) + ". " + ServiceManager.getServiceList().get(i).getName());
-        }
+        ServiceManager.showService();
         Scanner scanner = new Scanner(System.in);
         int chose = scanner.nextInt();
         if (chose <= ServiceManager.getServiceList().size()){
-            ServiceManager.getServiceList().remove(chose);
+            ServiceManager.deleteService(chose);
             System.out.println("da xoa");
         }
         else {
@@ -221,18 +208,13 @@ public class Client {
     }
 
     private static void checkOutOneGuy() {
-        boolean check = false;
-        int index = QUIT;
         System.out.println("Nhap cmnd");
         Scanner scanner = new Scanner(System.in);
         long cmnd = scanner.nextLong();
-        for (int i = 0; i < CustomerManager.getCustomerList().size(); i++) {
-            if (CustomerManager.getCustomerList().get(i).getIdentityCard() == cmnd)
-            {index = i;
-                check = true;
-                break;}
-        }
-        if (check)
+        boolean check = false;
+        int index = CustomerManager.findCustomerByCmnd(cmnd);
+            if (index != -1)   check = true;
+            if (check)
         {
             Customer tempCustomer = CustomerManager.getCustomerList().get(index);
             Room tempRoom = CustomerManager.getCustomerList().get(index).getRoom();
@@ -263,15 +245,8 @@ public class Client {
         Scanner scanner2 = new Scanner(System.in);
         String nameRoom = scanner2.nextLine();
         boolean check = false;
-        int index = QUIT;
-
-        for (int i = 0; i < RoomManager.getSize(); i++) {
-            if (Objects.equals(nameRoom, RoomManager.getListRoom().get(i).getName())){
-                check = true;
-                index = i;
-                break;
-            }
-        }
+        int index = RoomManager.findRoomByName(nameRoom);
+        if (index != -1) check = true;
         if (check) {
             checkInMoreOne(index, chose);
         }
@@ -325,50 +300,12 @@ public class Client {
 
     private static void choseTypeRoom(int chose) {
         switch (chose){
-            case 1 -> showGrandRoomNull();
-            case 2-> showStandardRoomNull();
-            case 3 -> showSuiteRoomNull();
+            case 1 -> RoomManager.showGrandRoomNull();
+            case 2-> RoomManager.showStandardRoomNull();
+            case 3 -> RoomManager.showSuiteRoomNull();
         }
     }
 
-    private static void showSuiteRoomNull() {
-        boolean check = true;
-        for (int i = 0; i < RoomManager.getSize(); i++) {
-            if (RoomManager.getListRoom().get(i).isEmpty() && RoomManager.getListRoom().get(i) instanceof SuiteRoom){
-                System.out.println(RoomManager.getListRoom().get(i));
-                check = false;
-            }
-        }
-        if (check){
-            System.out.println("het phong");
-        }
-    }
-
-    private static void showStandardRoomNull() {
-        boolean check = true;
-        for (int i = 0; i < RoomManager.getSize(); i++) {
-            if (RoomManager.getListRoom().get(i).isEmpty() && RoomManager.getListRoom().get(i) instanceof StandardRoom){
-                System.out.println(RoomManager.getListRoom().get(i));
-                check = false;
-            }
-        }
-        if (check){
-            System.out.println("het phong");
-        }
-    }
-
-    private static void showGrandRoomNull() {
-        boolean check = true;
-        for (int i = 0; i < RoomManager.getSize(); i++) {
-            if (RoomManager.getListRoom().get(i).isEmpty() && RoomManager.getListRoom().get(i) instanceof GrandRoom){
-                System.out.println(RoomManager.getListRoom().get(i));
-                check = false;
-            }
-        }
-        if (check){
-            System.out.println("het phong");
-        }
-    }
 
     private static void methodRoomManager() {
         System.out.println("1. Show phong");
@@ -381,7 +318,7 @@ public class Client {
 
     private static void choseMethodRoomManager(int chose) {
         switch (chose){
-            case FIRSTCHOSEN -> showRoom();
+            case FIRSTCHOSEN -> RoomManager.showRoom();
             case SECONDCHOSEN -> editRoom();
             case THIRDCHOSEN -> addRoom();
             default -> { System.out.println("nhap 1 hoac 2 hoac 3");
@@ -417,20 +354,13 @@ public class Client {
     }
 
     private static void editRoom() {
-        showRoom();
-        int index = QUIT;
+        RoomManager.showRoom();
         boolean checkNameRoom = false;
         System.out.println("Nhap ten phong muon sua");
         Scanner scanner = new Scanner(System.in);
         String name = scanner.nextLine();
-        for (int i = 0; i < RoomManager.getListRoom().size(); i++) {
-            if (Objects.equals(name, RoomManager.getListRoom().get(i).getName())){
-                checkNameRoom = true;
-                index = i;
-                break;
-            }
-
-        }
+        int index = RoomManager.findRoomByName(name);
+        if (index != -1) checkNameRoom = true;
         if (checkNameRoom) whatEdit(index);
         else System.out.println("khong co phong nay");
         RNWRoomManager.writeData(RoomManager.getListRoom());
@@ -443,7 +373,6 @@ public class Client {
         System.out.println("2. Sua ten");
         chosenEditRoom(chose, index);
     }
-
     private static void chosenEditRoom(int chose, int index) {
         switch (chose){
             case FIRSTCHOSEN -> {
@@ -463,15 +392,5 @@ public class Client {
         }
         RNWRoomManager.writeData(RoomManager.getListRoom());
         RNWCustomerManager.writeData(CustomerManager.getCustomerList());
-    }
-
-    private static void showRoom() {
-        for (int i = 0; i < RoomManager.getListRoom().size(); i++){
-            System.out.println(RoomManager.getListRoom().get(i));
-        }
-    }
-
-    private static boolean checkAccountAdmin(String account, int password) {
-        return Objects.equals(User.getACCOUNT(), account) && User.getPASSWORD() == password;
     }
 }

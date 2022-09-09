@@ -24,4 +24,5 @@ public class StandardRoom extends Room {
         }
         return this.cost* CalculateDate.countDays(dayCheckIn.getDayOfMonth(),dayCheckIn.getMonthValue(),dayCheckIn.getYear()) + sum;
     }
+
 }

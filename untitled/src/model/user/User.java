@@ -1,6 +1,7 @@
 package model.user;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class User implements Serializable {
     private static final String ACCOUNT = "admin";
@@ -16,5 +17,9 @@ public class User implements Serializable {
     public static int getPASSWORD() {
         return PASSWORD;
     }
+    public static boolean checkAccountAdmin(String account, int password) {
+        return Objects.equals(User.getACCOUNT(), account) && User.getPASSWORD() == password;
+    }
 }
+
 
