@@ -16,6 +16,7 @@ import views.menu.LogIn;
 import views.menu.Menu;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -27,6 +28,12 @@ public class Client {
     public static final int QUIT = -1;
 
     public static void main(String[] args) {
+        ArrayList<Room> arrayList = new ArrayList<>();
+        ArrayList<Customer> customers = new ArrayList<>();
+        ArrayList<Service> services = new ArrayList<>();
+        RNWRoomManager.writeData(arrayList);
+        RNWCustomerManager.writeData(customers);
+        RNWServiceManager.writeData(services);
         int chose;
             chose = Menu.getChoseBegin();
             whoAreYou(chose);
@@ -86,6 +93,8 @@ public class Client {
     private static void logInAdmin() {
         if (LogIn.logInAdmin())
             methodAdmin();
+        else { System.out.println("Sai");
+            logInAdmin();}
     }
 
     private static void methodAdmin() {
@@ -189,7 +198,10 @@ public class Client {
             tempRoom.getServiceList().clear();
             tempRoom.getCustomerList().remove(tempCustomer);
             CustomerManager.getCustomerList().remove(index);
-            if (tempRoom.getCustomerList().size() == 0) tempRoom.setEmpty(true);
+            if (tempRoom.getCustomerList().size() == 0) {tempRoom.setEmpty(true);
+            tempRoom.setDayCheckIn(null);
+            tempRoom.getCustomerList().clear();
+            }
             System.out.println("Check out done");
         }
         else System.out.println("khong check out duoc");
@@ -239,7 +251,7 @@ public class Client {
         Customer customer1 = Menu.createOneCustomer(index,i);
         RoomManager.getListRoom().get(index).setEmpty(false);
         CustomerManager.addCumtomer(customer1);
-        CustomerManager.getCustomerList().get(index).getRoom().getCustomerList().add(customer1);
+        RoomManager.getListRoom().get(index).getCustomerList().add(customer1);
     }
 
     private static void choseTypeRoom(int chose) {
@@ -306,6 +318,7 @@ public class Client {
         int chose;
         chose = Menu.whatEditRoom();
         chosenEditRoom(chose, index);
+
     }
     private static void chosenEditRoom(int chose, int index) {
         switch (chose){

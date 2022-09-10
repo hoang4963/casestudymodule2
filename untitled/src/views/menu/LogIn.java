@@ -13,11 +13,6 @@ public class LogIn {
         System.out.println("nhap mat khau (dang so)");
         Scanner scanner2 = new Scanner(System.in);
         int password = scanner2.nextInt();
-        if (User.checkAccountAdmin(account,password))
-            return true;
-        else {System.out.println("Sai");
-            logInAdmin();
-        }
-        return false;
+        return User.checkAccountAdmin(account, password);
     }
 }

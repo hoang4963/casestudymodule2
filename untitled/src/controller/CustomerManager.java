@@ -24,7 +24,7 @@ public class CustomerManager implements Serializable {
                 break;
             }
         }
-        CustomerManager.getCustomerList().get(index).getRoom().orderService(ServiceManager.getServiceList().get(chose));
+        CustomerManager.getCustomerList().get(index).getRoom().orderService(ServiceManager.getServiceList().get(chose-1));
     }
     public static int findCustomerByCmnd(long cmnd){
         int index = -1;

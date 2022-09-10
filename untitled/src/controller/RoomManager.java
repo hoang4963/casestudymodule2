@@ -21,8 +21,9 @@ public class RoomManager implements Serializable {
         return roomList.size() <= CAPACITY;
     }
     public static void addRoom(Room room){
-        if (checkfull())
-        roomList.add(room);
+        if (checkfull()){
+            System.out.println("done");
+        roomList.add(room);}
         else System.out.println("Full");
     }
     public static List<Room> getListRoom(){

@@ -1,14 +1,12 @@
 package model.room;
 
 
-
 import model.customer.Customer;
 import model.service.Service;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public abstract class Room implements MakeBill, Serializable {
@@ -17,7 +15,7 @@ public abstract class Room implements MakeBill, Serializable {
     protected boolean isEmpty;
     private Room(){}
     protected double cost;
-    protected List<Service> serviceList;
+    protected ArrayList<Service> serviceList;
     protected ArrayList<Customer> customerList;
 
     protected Room(String name, double cost) {
@@ -25,7 +23,6 @@ public abstract class Room implements MakeBill, Serializable {
         this.name = name;
         this.dayCheckIn = null;
         this.isEmpty = true;
-        serviceList = null;
     }
 
     public Room(String name, LocalDate dayCheckIn, double cost) {
@@ -33,7 +30,6 @@ public abstract class Room implements MakeBill, Serializable {
         this.dayCheckIn = dayCheckIn;
         this.cost = cost;
         this.isEmpty = true;
-        serviceList = null;
     }
 
     public String getName() {
@@ -75,17 +71,34 @@ public abstract class Room implements MakeBill, Serializable {
                 ", dayCheckIn=" + dayCheckIn +
                 ", isEmpty=" + isEmpty +
                 ", cost=" + cost +
+                ", serviceList=" + showService() +
+                ", customerList=" + showCustomer() +
                 '}';
     }
     public void orderService(Service service){
+        if (serviceList == null) serviceList = new ArrayList<>();
         serviceList.add(service);
     }
 
-    public List<Service> getServiceList() {
+    public ArrayList<Service> getServiceList() {
         return serviceList;
     }
 
     public ArrayList<Customer> getCustomerList() {
         return customerList;
+    }
+    public String showService(){
+        StringBuilder data = new StringBuilder();
+        for (Service service : serviceList) {
+            data.append(service.toString()).append("   ");
+        }
+        return data.toString();
+    }
+    public String showCustomer(){
+        StringBuilder data = new StringBuilder();
+        for (Customer service : customerList) {
+            data.append(service.toString()).append("   ");
+        }
+        return data.toString();
     }
 }

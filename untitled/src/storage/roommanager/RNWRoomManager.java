@@ -1,8 +1,5 @@
 package storage.roommanager;
-
-import controller.RoomManager;
 import model.room.Room;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
