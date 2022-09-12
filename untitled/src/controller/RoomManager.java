@@ -85,4 +85,13 @@ public class RoomManager implements Serializable {
             System.out.println(roomList.get(i));
         }
     }
+    public static int findIndexInRoom(Room room, long cmnd) {
+        int index = -1;
+        for (int i = 0; i < room.getCustomerList().size(); i++) {
+            if (room.getCustomerList().get(i).getIdentityCard() == cmnd)
+            {index = i;
+                break;}
+        }
+        return index;
+    }
 }

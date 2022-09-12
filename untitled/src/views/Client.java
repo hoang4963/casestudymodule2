@@ -194,9 +194,10 @@ public class Client {
         {
 
             Room tempRoom = CustomerManager.getCustomerList().get(index).getRoom();
-            int indexInRoom = findIndexInRoom(tempRoom, cmnd);
+            int indexInRoom = RoomManager.findIndexInRoom(tempRoom, cmnd);
             System.out.println("Bill la: " + tempRoom.calculateBill());
-            tempRoom.getServiceList().clear();
+            if (tempRoom.getServiceList() != null)
+            {tempRoom.getServiceList().clear();}
             tempRoom.getCustomerList().remove(indexInRoom);
             CustomerManager.getCustomerList().remove(index);
             if (tempRoom.getCustomerList().size() == 0) {tempRoom.setEmpty(true);
@@ -209,17 +210,6 @@ public class Client {
         RNWCustomerManager.writeData(CustomerManager.getCustomerList());
         RNWRoomManager.writeData(RoomManager.getListRoom());
     }
-
-    private static int findIndexInRoom(Room room, long cmnd) {
-        int index = -1;
-        for (int i = 0; i < room.getCustomerList().size(); i++) {
-            if (room.getCustomerList().get(i).getIdentityCard() == cmnd)
-            {index = i;
-            break;}
-        }
-        return index;
-    }
-
     private static void creatCumtomerCheckIn() {
         int chose = Menu.choseTypeRoom();
         if (chose >0 && chose <4)

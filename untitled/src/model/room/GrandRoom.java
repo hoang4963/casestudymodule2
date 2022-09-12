@@ -20,9 +20,13 @@ public class GrandRoom extends Room {
     @Override
     public double calculateBill() {
         double sum = 0;
-        for (int i = 0; i < serviceList.size(); i++) {
-            sum += serviceList.get(i).getCost();
+        if (this.serviceList != null) {
+            for (model.service.Service service : serviceList) {
+                sum += service.getCost();
+            }
+            return this.cost* CalculateDate.countDays(dayCheckIn.getDayOfMonth(),dayCheckIn.getMonthValue(),dayCheckIn.getYear()) + sum;
+            }
+        else return this.cost* CalculateDate.countDays(dayCheckIn.getDayOfMonth(),dayCheckIn.getMonthValue(),dayCheckIn.getYear());
         }
-        return this.cost* CalculateDate.countDays(dayCheckIn.getDayOfMonth(),dayCheckIn.getMonthValue(),dayCheckIn.getYear()) + sum;
     }
-}
+
