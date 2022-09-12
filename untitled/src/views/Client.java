@@ -28,12 +28,12 @@ public class Client {
     public static final int QUIT = -1;
 
     public static void main(String[] args) {
-        ArrayList<Room> arrayList = new ArrayList<>();
-        ArrayList<Customer> customers = new ArrayList<>();
-        ArrayList<Service> services = new ArrayList<>();
-        RNWRoomManager.writeData(arrayList);
-        RNWCustomerManager.writeData(customers);
-        RNWServiceManager.writeData(services);
+//        ArrayList<Room> arrayList = new ArrayList<>();
+//        ArrayList<Customer> customers = new ArrayList<>();
+//        ArrayList<Service> services = new ArrayList<>();
+//        RNWRoomManager.writeData(arrayList);
+//        RNWCustomerManager.writeData(customers);
+//        RNWServiceManager.writeData(services);
         int chose;
             chose = Menu.getChoseBegin();
             whoAreYou(chose);
@@ -256,9 +256,14 @@ public class Client {
 
     private static void choseTypeRoom(int chose) {
         switch (chose){
-            case 1 -> RoomManager.showGrandRoomNull();
-            case 2-> RoomManager.showStandardRoomNull();
-            case 3 -> RoomManager.showSuiteRoomNull();
+            case 1 -> {RoomManager.showGrandRoomNull();
+            System.out.println("nhap ten phong");
+            }
+            case 2-> {RoomManager.showStandardRoomNull();
+                System.out.println("nhap ten phong");
+            }
+            case 3 ->{RoomManager.showSuiteRoomNull();
+                System.out.println("nhap ten phong");}
         }
     }
 

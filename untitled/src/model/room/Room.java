@@ -23,6 +23,7 @@ public abstract class Room implements MakeBill, Serializable {
         this.name = name;
         this.dayCheckIn = null;
         this.isEmpty = true;
+        this.serviceList = new ArrayList<>();
     }
 
     public Room(String name, LocalDate dayCheckIn, double cost) {
@@ -30,6 +31,7 @@ public abstract class Room implements MakeBill, Serializable {
         this.dayCheckIn = dayCheckIn;
         this.cost = cost;
         this.isEmpty = true;
+        this.serviceList = new ArrayList<>();
     }
 
     public String getName() {
@@ -66,7 +68,16 @@ public abstract class Room implements MakeBill, Serializable {
 
     @Override
     public String toString() {
+        if (serviceList == null || customerList == null){
         return "Room{" +
+                "name='" + name + '\'' +
+                ", dayCheckIn=" + dayCheckIn +
+                ", isEmpty=" + isEmpty +
+                ", cost=" + cost +
+                ", serviceList=" + serviceList +
+                ", customerList=" + customerList +
+                '}';}
+        else return "Room{" +
                 "name='" + name + '\'' +
                 ", dayCheckIn=" + dayCheckIn +
                 ", isEmpty=" + isEmpty +
