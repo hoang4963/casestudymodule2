@@ -246,7 +246,6 @@ public class Client {
         }
     }
 
-
     private static void methodRoomManager() {
         int chose = Menu.methodRoomManager();
         choseMethodRoomManager(chose);
