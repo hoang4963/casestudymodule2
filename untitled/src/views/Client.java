@@ -192,11 +192,12 @@ public class Client {
             if (index != -1)   check = true;
             if (check)
         {
-            Customer tempCustomer = CustomerManager.getCustomerList().get(index);
+
             Room tempRoom = CustomerManager.getCustomerList().get(index).getRoom();
+            int indexInRoom = findIndexInRoom(tempRoom, cmnd);
             System.out.println("Bill la: " + tempRoom.calculateBill());
             tempRoom.getServiceList().clear();
-            tempRoom.getCustomerList().remove(tempCustomer);
+            tempRoom.getCustomerList().remove(indexInRoom);
             CustomerManager.getCustomerList().remove(index);
             if (tempRoom.getCustomerList().size() == 0) {tempRoom.setEmpty(true);
             tempRoom.setDayCheckIn(null);
@@ -207,6 +208,16 @@ public class Client {
         else System.out.println("khong check out duoc");
         RNWCustomerManager.writeData(CustomerManager.getCustomerList());
         RNWRoomManager.writeData(RoomManager.getListRoom());
+    }
+
+    private static int findIndexInRoom(Room room, long cmnd) {
+        int index = -1;
+        for (int i = 0; i < room.getCustomerList().size(); i++) {
+            if (room.getCustomerList().get(i).getIdentityCard() == cmnd)
+            {index = i;
+            break;}
+        }
+        return index;
     }
 
     private static void creatCumtomerCheckIn() {
