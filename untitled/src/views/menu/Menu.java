@@ -1,7 +1,9 @@
 package views.menu;
 
+import controller.CustomerManager;
 import controller.RoomManager;
 import model.customer.Customer;
+import model.room.Room;
 
 import java.time.LocalDate;
 import java.util.Scanner;
@@ -84,5 +86,29 @@ public class Menu {
         System.out.println("2. Sua ten");
         Scanner scanner = new Scanner(System.in);
         return scanner.nextInt();
+    }
+    public static void checkOutOneGuy() {
+        System.out.println("Nhap cmnd");
+        Scanner scanner = new Scanner(System.in);
+        long cmnd = scanner.nextLong();
+        boolean check = false;
+        int index = CustomerManager.findCustomerByCmnd(cmnd);
+        if (index != -1) check = true;
+        if (check) {
+
+            Room tempRoom = CustomerManager.getCustomerList().get(index).getRoom();
+            int indexInRoom = RoomManager.findIndexInRoom(tempRoom, cmnd);
+            System.out.println("Bill la: " + tempRoom.calculateBill());
+            if (tempRoom.getServiceList() != null) {
+                tempRoom.getServiceList().clear();
+            }
+            tempRoom.getCustomerList().remove(indexInRoom);
+            CustomerManager.getCustomerList().remove(index);
+            if (tempRoom.getCustomerList().size() == 0) {
+                tempRoom.setEmpty(true);
+                tempRoom.setDayCheckIn(null);
+            }
+            System.out.println("Check out done");
+        } else System.out.println("khong check out duoc");
     }
 }

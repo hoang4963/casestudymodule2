@@ -184,29 +184,7 @@ public class Client {
     }
 
     private static void checkOutOneGuy() {
-        System.out.println("Nhap cmnd");
-        Scanner scanner = new Scanner(System.in);
-        long cmnd = scanner.nextLong();
-        boolean check = false;
-        int index = CustomerManager.findCustomerByCmnd(cmnd);
-            if (index != -1)   check = true;
-            if (check)
-        {
-
-            Room tempRoom = CustomerManager.getCustomerList().get(index).getRoom();
-            int indexInRoom = RoomManager.findIndexInRoom(tempRoom, cmnd);
-            System.out.println("Bill la: " + tempRoom.calculateBill());
-            if (tempRoom.getServiceList() != null)
-            {tempRoom.getServiceList().clear();}
-            tempRoom.getCustomerList().remove(indexInRoom);
-            CustomerManager.getCustomerList().remove(index);
-            if (tempRoom.getCustomerList().size() == 0) {tempRoom.setEmpty(true);
-            tempRoom.setDayCheckIn(null);
-            tempRoom.getCustomerList().clear();
-            }
-            System.out.println("Check out done");
-        }
-        else System.out.println("khong check out duoc");
+        Menu.checkOutOneGuy();
         RNWCustomerManager.writeData(CustomerManager.getCustomerList());
         RNWRoomManager.writeData(RoomManager.getListRoom());
     }

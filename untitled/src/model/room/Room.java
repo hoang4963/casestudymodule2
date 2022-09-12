@@ -23,7 +23,6 @@ public abstract class Room implements MakeBill, Serializable {
         this.name = name;
         this.dayCheckIn = null;
         this.isEmpty = true;
-        this.serviceList = new ArrayList<>();
     }
 
     public Room(String name, LocalDate dayCheckIn, double cost) {
@@ -31,7 +30,6 @@ public abstract class Room implements MakeBill, Serializable {
         this.dayCheckIn = dayCheckIn;
         this.cost = cost;
         this.isEmpty = true;
-        this.serviceList = new ArrayList<>();
     }
 
     public String getName() {
@@ -68,7 +66,6 @@ public abstract class Room implements MakeBill, Serializable {
 
     @Override
     public String toString() {
-        if (serviceList == null || customerList == null){
         return "Room{" +
                 "name='" + name + '\'' +
                 ", dayCheckIn=" + dayCheckIn +
@@ -77,15 +74,6 @@ public abstract class Room implements MakeBill, Serializable {
                 ", serviceList=" + serviceList +
                 ", customerList=" + customerList +
                 '}';}
-        else return "Room{" +
-                "name='" + name + '\'' +
-                ", dayCheckIn=" + dayCheckIn +
-                ", isEmpty=" + isEmpty +
-                ", cost=" + cost +
-                ", serviceList=" + showService() +
-                ", customerList=" + showCustomer() +
-                '}';
-    }
     public void orderService(Service service){
         if (serviceList == null) serviceList = new ArrayList<>();
         serviceList.add(service);
@@ -97,19 +85,5 @@ public abstract class Room implements MakeBill, Serializable {
 
     public ArrayList<Customer> getCustomerList() {
         return customerList;
-    }
-    public String showService(){
-        StringBuilder data = new StringBuilder();
-        for (Service service : serviceList) {
-            data.append(service.toString()).append("   ");
-        }
-        return data.toString();
-    }
-    public String showCustomer(){
-        StringBuilder data = new StringBuilder();
-        for (Customer service : customerList) {
-            data.append(service.toString()).append("   ");
-        }
-        return data.toString();
     }
 }
